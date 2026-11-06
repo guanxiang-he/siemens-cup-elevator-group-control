@@ -2,16 +2,17 @@
 
 <p align="left">
   <a href="./README_EN.md"><img src="https://img.shields.io/badge/Lang-English-blue" alt="English README"></a>
-  <img src="https://img.shields.io/badge/Platform-TIA%20Portal-009999" alt="TIA Portal">
+  <img src="https://img.shields.io/badge/Platform-TIA%20Portal%20V18-009999" alt="TIA Portal V18">
   <img src="https://img.shields.io/badge/PLC-Siemens%20S7--1200-006699" alt="Siemens S7-1200">
   <img src="https://img.shields.io/badge/HMI-WinCC%20RT%20Pro%20%2B%20VBScript-4B8BBE" alt="WinCC">
+  <img src="https://img.shields.io/badge/Source%20Code-Included%20(.ap18)-brightgreen" alt="Source Included">
   <img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green" alt="License">
 </p>
 
 > **6-Elevator 10-Floor Group Control System** based on **Siemens S7-1200 PLC (LAD / FB / FC / DB)** and **WinCC RT Professional HMI (VBScript)** — developed for the *“Siemens Cup” China Intelligent Manufacturing Challenge (Discrete Industry Automation – Logic Algorithm Track)*.  
-> 👉 **[Click here for English Documentation (README_EN.md)](./README_EN.md)**
+> 👉 **[Click here for English Documentation (README_EN.md)](./README_EN.md)** | 📦 **[Download TIA Portal V18 Project (.zip) from Releases](https://github.com/h491218554-creator/siemens-cup-elevator-group-control/releases)**
 
-一套基于**西门子博途（TIA Portal）S7-1200 PLC** 与 **WinCC RT Professional** 开发的**六部十层群控电梯完整工程设计文档**（含 **107 张高清梯形图/组态截图** 与 VB 脚本源码解析）。原系列文章首发于个人技术博客（累计阅读超 2.5 万次），现完整整理开源至 GitHub，**永久免费开放阅读**。
+一套基于**西门子博途（TIA Portal V18）S7-1200 PLC** 与 **WinCC RT Professional** 开发的**六部十层群控电梯完整工程源码与设计文档**（含 **TIA Portal V18 完整工程源文件 `src/整合/整合.ap18`**、**107 张高清梯形图/组态截图** 与 VB 脚本源码解析）。原系列文章首发于个人技术博客（累计阅读超 2.5 万次），现连同完整比赛工程源码一并开源至 GitHub，**永久免费开放阅读与下载**。
 
 ---
 
@@ -95,6 +96,37 @@ flowchart LR
 
 ---
 
+## 🧩 博途工程程序块（OB / FB / FC / DB）与文档对照表
+
+工程源码位于 [`src/整合/整合.ap18`](src/整合/整合.ap18)（基于 TIA Portal V18.0.1.0，包含下位机 `PLC_2 [S7-1200]` 与上位机 `PC station [WinCC RT Professional]`），内部程序块结构如下：
+
+| 模块分类 | 单梯/算法封装块 (`FB` 嵌套块) | 6 梯集中调用块 (`FC` 函数) | 关联数据块 (`DB`) | 对应文档章节 |
+| :--- | :--- | :--- | :--- | :--- |
+| **主循环入口** | — | `Main` (`OB1`) | `输入变量`、`输出变量`、`中间变量1`、`中间变量2` | [第 1 篇](docs/01-competition-analysis-and-setup.md) |
+| **系统初始化** | `初始化 嵌套` | `初始化 函数` | `初始化 嵌套_DB` | [第 2 篇](docs/02-initialization.md) |
+| **楼层计数与校准** | `计算楼层 嵌套` | `计算楼层 函数` | `计算楼层 嵌套_DB` | [第 3 篇](docs/03-floor-calculation.md) |
+| **状态指示与显示** | `照明，风扇，数码管 嵌套` | `照明，风扇，数码管 函数` | `照明，风扇，数码管 嵌套_DB` | [第 4 篇](docs/04-signal-display.md) |
+| **上下行与制动** | `上下行和制动 嵌套` | `上下行和制动 函数` | `上下行和制动 嵌套_DB` | [第 5 篇](docs/05-up-down-motion.md) / [第 6 篇](docs/06-speed-switching-and-braking.md) |
+| **高低速切换** | `高低速 嵌套` | `高低速 函数`、`低速模式` | `高低速 嵌套_DB_1` | [第 6 篇](docs/06-speed-switching-and-braking.md) |
+| **停梯与开关门** | `停梯优先级和开关门 嵌套` | `停梯优先级和开关门 函数` | `停梯优先级和开关门 嵌套_DB` | [第 7 篇](docs/07-stop-priority-and-doors.md) |
+| **停站次数统计** | `停站次数 嵌套` | `停站次数 函数` | `停站次数 嵌套_DB_1` | [第 8 篇](docs/08-stop-count.md) |
+| **外呼目标判断** | `有无目标判断嵌套块` | `有无目标判断` | `有无目标判断嵌套块_DB_1` | [第 9 篇](docs/09-dispatch-algorithm.md) |
+| **群控距离计算** | `调度距离嵌套块` | `调度距离` | `调度距离嵌套块_DB_1` | [第 9 篇](docs/09-dispatch-algorithm.md) |
+| **最小代价筛选分配** | `比较筛选分配嵌套块` | `比较筛选` | `比较筛选分配嵌套块_DB` | [第 9 篇](docs/09-dispatch-algorithm.md) |
+| **上位机监控** | `PC station` (7 大画面 + `denglu` VBScript) | — | HMI 变量表双向绑定 | [第 10 篇](docs/10-wincc-hmi-vbscript.md) |
+
+---
+
+## 🚀 快速使用说明（如何打开工程源码）
+
+1. **环境要求**：Siemens TIA Portal **V18**（需包含 **STEP 7 Professional V18** 与 **WinCC RT Professional V18**）。
+2. **获取工程**：
+   - **方式一（推荐）**：直接前往本仓库 [Releases 页面](https://github.com/h491218554-creator/siemens-cup-elevator-group-control/releases) 下载 `Siemens-Cup-6Car-10Floor-Elevator-TIA-V18.zip` 解压；
+   - **方式二**：克隆本仓库 `git clone https://github.com/h491218554-creator/siemens-cup-elevator-group-control.git`。
+3. **打开项目**：在博途 V18 中打开 `src/整合/整合.ap18`（注意：请保持外层文件夹名称为 `整合`，不要单独重命名文件夹，否则博途会提示项目路径名称不匹配）。
+
+---
+
 ## 📂 仓库目录结构
 
 ```text
@@ -102,6 +134,12 @@ siemens-cup-elevator-group-control/
 ├── README.md                 # 中文项目主页
 ├── README_EN.md              # English Project Overview
 ├── LICENSE                   # CC BY-NC-SA 4.0 知识共享许可协议
+├── src/
+│   └── 整合/                 # 西门子博途 TIA Portal V18 完整工程源文件
+│       ├── 整合.ap18         # 博途 V18 项目入口文件
+│       ├── System/           # PLC 与项目核心数据库 (PEData.plf)
+│       ├── IM/               # WinCC HMI 编译与运行数据 (RtData.plf)
+│       └── XRef/             # 交叉引用数据库 (XRef.db)
 └── docs/                     # 10 篇完整工程文档 + 调度算法综述附录
     ├── 01-competition-analysis-and-setup.md
     ├── ...

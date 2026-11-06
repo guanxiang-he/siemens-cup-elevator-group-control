@@ -2,13 +2,16 @@
 
 <p align="left">
   <a href="./README.md"><img src="https://img.shields.io/badge/文档语言-简体中文-blue" alt="中文文档"></a>
-  <img src="https://img.shields.io/badge/Platform-Siemens%20TIA%20Portal-009999" alt="TIA Portal">
+  <img src="https://img.shields.io/badge/Platform-Siemens%20TIA%20Portal%20V18-009999" alt="TIA Portal V18">
   <img src="https://img.shields.io/badge/PLC-SIMATIC%20S7--1200-006699" alt="Siemens S7-1200">
   <img src="https://img.shields.io/badge/HMI-WinCC%20RT%20Professional-4B8BBE" alt="WinCC">
+  <img src="https://img.shields.io/badge/Source%20Project-Included%20(.ap18)-brightgreen" alt="Source Included">
   <img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green" alt="License">
 </p>
 
-Complete PLC & HMI engineering design series for a **6-car, 10-floor elevator group control system**, built with **Siemens TIA Portal**, **SIMATIC S7-1200 (Ladder Logic / FB / FC / DB)**, and **WinCC RT Professional (HMI + VBScript)** for the *“Siemens Cup” China Intelligent Manufacturing Challenge (Discrete Industry Automation – Logic Algorithm Track)*.
+Complete **TIA Portal V18 project source (`src/整合/整合.ap18`)** and 11-part engineering design series for a **6-car, 10-floor elevator group control system**, built with **Siemens TIA Portal V18**, **SIMATIC S7-1200 (Ladder Logic / FB / FC / DB)**, and **WinCC RT Professional (HMI + VBScript)** for the *“Siemens Cup” China Intelligent Manufacturing Challenge (Discrete Industry Automation – Logic Algorithm Track)*.
+
+> 📦 **One-Click Project Download**: Grab `Siemens-Cup-6Car-10Floor-Elevator-TIA-V18.zip` directly from the **[Releases Page](https://github.com/h491218554-creator/siemens-cup-elevator-group-control/releases)**, or open [`src/整合/整合.ap18`](src/整合/整合.ap18) in **Siemens TIA Portal V18** (STEP 7 Professional V18 + WinCC RT Professional V18).
 
 ---
 
@@ -79,6 +82,25 @@ flowchart TB
 | **Group Dispatch** | [09 – Group Dispatching Algorithm](docs/09-dispatch-algorithm.md) | 5-case SSTF cost formulas, stop-weight amplification, dynamic pursuit takeover, hall/car call coincidence interlock | 12 |
 | **HMI / SCADA** | [10 – WinCC Configuration & VBScript](docs/10-wincc-hmi-vbscript.md) | PC station & `IE General` Ethernet setup, 7 HMI screens, VBScript login validation & runtime resolution tuning | 24 |
 | **Appendix** | [Appendix – Survey of Group Dispatch Algorithms](docs/appendix-dispatch-algorithms.md) | Comparison of FCFS, SSTF, SCAN, LOOK, SATF, EDF, SCAN-EDF, PI, FD-SCAN & AI-based group control | — |
+
+---
+
+## 🧩 PLC Program Block Architecture (`src/整合/整合.ap18`)
+
+| Subsystem | Reusable Function Block (`FB`) | 6-Car Caller Function (`FC` / `OB`) | Instance / Global `DB` | Doc Chapter |
+| :--- | :--- | :--- | :--- | :--- |
+| **Main Cycle & I/O** | — | `Main` (`OB1`) | `输入变量` (Inputs), `输出变量` (Outputs), `中间变量1/2` | [Ch. 01](docs/01-competition-analysis-and-setup.md) |
+| **Homing & Re-Init** | `初始化 嵌套` | `初始化 函数` | `初始化 嵌套_DB` | [Ch. 02](docs/02-initialization.md) |
+| **Floor Counter & Calibration** | `计算楼层 嵌套` | `计算楼层 函数` | `计算楼层 嵌套_DB` | [Ch. 03](docs/03-floor-calculation.md) |
+| **14-Seg Display & Cabin Aux** | `照明，风扇，数码管 嵌套` | `照明，风扇，数码管 函数` | `照明，风扇，数码管 嵌套_DB` | [Ch. 04](docs/04-signal-display.md) |
+| **Motion & 3-Stage Braking** | `上下行和制动 嵌套` | `上下行和制动 函数` | `上下行和制动 嵌套_DB` | [Ch. 05](docs/05-up-down-motion.md) / [Ch. 06](docs/06-speed-switching-and-braking.md) |
+| **High/Low Speed Switching** | `高低速 嵌套` | `高低速 函数`, `低速模式` | `高低速 嵌套_DB_1` | [Ch. 06](docs/06-speed-switching-and-braking.md) |
+| **Stop Priority & Door Control** | `停梯优先级和开关门 嵌套` | `停梯优先级和开关门 函数` | `停梯优先级和开关门 嵌套_DB` | [Ch. 07](docs/07-stop-priority-and-doors.md) |
+| **Intermediate Stop Counter** | `停站次数 嵌套` | `停站次数 函数` | `停站次数 嵌套_DB_1` | [Ch. 08](docs/08-stop-count.md) |
+| **Call Target Detection** | `有无目标判断嵌套块` | `有无目标判断` | `有无目标判断嵌套块_DB_1` | [Ch. 09](docs/09-dispatch-algorithm.md) |
+| **SSTF Dispatch Cost Calc** | `调度距离嵌套块` | `调度距离` | `调度距离嵌套块_DB_1` | [Ch. 09](docs/09-dispatch-algorithm.md) |
+| **Min-Cost Comparator & Lock** | `比较筛选分配嵌套块` | `比较筛选` | `比较筛选分配嵌套块_DB` | [Ch. 09](docs/09-dispatch-algorithm.md) |
+| **Supervisory HMI** | `PC station` (7 Screens + `denglu` VBScript) | — | Bidirectional HMI Tag Table | [Ch. 10](docs/10-wincc-hmi-vbscript.md) |
 
 ---
 
